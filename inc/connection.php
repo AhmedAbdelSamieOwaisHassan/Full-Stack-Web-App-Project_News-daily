@@ -1,6 +1,7 @@
 <?php
-
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 $hostName = getenv('DB_HOST') ?: 'localhost';
 $DBuser = getenv('DB_USER') ?: ($hostName === 'localhost' ? 'root' : '');
