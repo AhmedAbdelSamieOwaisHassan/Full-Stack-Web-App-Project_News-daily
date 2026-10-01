@@ -8,8 +8,6 @@ $password = getenv('DB_PASSWORD') ?: '';
 $dbName = getenv('DB_NAME') ?: ($hostName === 'localhost' ? 'site_news_project' : '');
 $port = (int) (getenv('DB_PORT') ?: ($hostName === 'localhost' ? 3306 : 4000));
 $caPath = getenv('DB_CA_PATH') ?: null;
-$caCertificate = getenv('DB_CA_CERT');
-$temporaryCaPath = null;
 
 $isRemote = !in_array(strtolower($hostName), ['localhost', '127.0.0.1'], true);
 
@@ -20,27 +18,10 @@ if ($isRemote && ($DBuser === '' || $password === '' || $dbName === '')) {
 }
 
 if ($isRemote) {
-    if (!$caPath && ($caCertificate === false || $caCertificate === '')) {
-        error_log('DB_CA_CERT or DB_CA_PATH is required for a remote database connection.');
+    if ($caPath && !is_file($caPath)) {
+        error_log('The configured DB_CA_PATH file does not exist.');
         http_response_code(500);
-        exit('Database TLS certificate is not configured.');
-    }
-
-    if ($caCertificate !== false && $caCertificate !== '') {
-        $caCertificate = str_replace(["\\r\\n", "\\n", "\\r"], "\n", $caCertificate);
-        if (openssl_x509_read($caCertificate) === false) {
-            error_log('DB_CA_CERT is not a valid PEM certificate.');
-            http_response_code(500);
-            exit('The database TLS certificate is invalid. Set DB_CA_CERT to the complete PEM certificate.');
-        }
-
-        $temporaryCaPath = tempnam(sys_get_temp_dir(), 'db-ca-');
-        if ($temporaryCaPath === false || file_put_contents($temporaryCaPath, $caCertificate) === false) {
-            error_log('Database CA certificate could not be prepared.');
-            http_response_code(500);
-            exit('Database TLS certificate could not be loaded.');
-        }
-        $caPath = $temporaryCaPath;
+        exit('The configured database CA file was not found.');
     }
 }
 
@@ -59,10 +40,6 @@ if ($isRemote) {
 
 $flags = $isRemote ? MYSQLI_CLIENT_SSL : 0;
 $connected = mysqli_real_connect($connection, $hostName, $DBuser, $password, $dbName, $port, null, $flags);
-
-if ($temporaryCaPath !== null) {
-    unlink($temporaryCaPath);
-}
 
 if (!$connected) {
     error_log('Database connection failed: '.mysqli_connect_error());
