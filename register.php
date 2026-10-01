@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once 'inc/header.php';
+require_once __DIR__.'/inc/header.php';
 
 $errors = $_SESSION['errors'] ?? [];
 $old = $_SESSION['old'] ?? [];
@@ -25,7 +25,8 @@ unset($_SESSION['old']);
                 <span class="badge bg-primary-subtle text-primary badge-category mb-3">Register</span>
                 <h1 class="mb-4">Create your account</h1>
 
-                <form class="form" action="handle/handleRegister.php" method="post">
+
+                <form class="form" action="/handle/handleRegister.php" method="post">
                     <div class="mb-3">
                         <label class="form-label" for="name">Full name</label>
                         <input type="text" id="name" name="name" class="form-control" required
@@ -66,7 +67,8 @@ unset($_SESSION['old']);
 
                     <p class="text-center text-secondary small mt-3 mb-0">
                         <span>Already have an account?</span>
-                        <a href="login.php" class="text-decoration-none">Sign in</a>
+
+                        <a href="/login.php" class="text-decoration-none">Sign in</a>
                     </p>
                 </form>
             </div>
@@ -74,4 +76,4 @@ unset($_SESSION['old']);
     </div>
 </main>
 
-<?php include 'inc/footer.php'; ?>
+<?php require_once __DIR__.'/inc/footer.php'; ?>

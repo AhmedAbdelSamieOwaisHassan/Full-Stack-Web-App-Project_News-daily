@@ -1,20 +1,22 @@
 <?php
-require_once 'inc/header.php';
-require_once 'inc/connection.php';
+require_once __DIR__.'/inc/header.php';
+require_once __DIR__.'/inc/connection.php';
 
 if (!isset($_GET['id'])) {
-    header('location:index.php');
+    header('location: /index.php');
     exit;
 }
 
-$id = $_GET['id'];
+$id = (int) $_GET['id'];
 
-$query = "SELECT * FROM posts WHERE  id=$id";
-
+$query = "SELECT * FROM posts WHERE id = $id";
 $result = mysqli_query($connection, $query);
 
-$post = mysqli_fetch_assoc($result);
-
+if ($result && mysqli_num_rows($result) > 0) {
+    $post = mysqli_fetch_assoc($result);
+} else {
+    $post = null;
+}
 ?>
 
 <main class="container py-5">
@@ -22,38 +24,30 @@ $post = mysqli_fetch_assoc($result);
 
         <div class="col-lg-8">
             <div class="bg-white rounded-4 shadow-sm overflow-hidden">
-                <?php if (mysqli_num_rows($result) > 0) {?>
+                <?php if ($post) { ?>
                 <div class="image-placeholder feature-image d-flex align-items-center justify-content-center">
-                    <img src="/assets/image/postImage/<?php echo $post['image']; ?>" alt="Post title"
+                    <img src="/assets/image/postImage/<?php echo htmlspecialchars($post['image']); ?>" alt="Post title"
                         class="img-fluid w-100 feature-image">
                 </div>
 
                 <div class="p-4 p-lg-5">
 
                     <span class="badge bg-primary-subtle text-primary badge-category mb-3">
-                        <?php echo $post['badge']; ?>
+                        <?php echo htmlspecialchars($post['badge']); ?>
                     </span>
 
                     <h1 class="fw-bold mb-3">
-                        <?php echo $post['title']; ?>
-
+                        <?php echo htmlspecialchars($post['title']); ?>
                     </h1>
 
-                    <div class="text-secondary small mb-4">
-                        <?php echo $post['body']; ?>
-
+                    <div class="text-secondary lead mb-4">
+                        <?php echo htmlspecialchars($post['body']); ?>
                     </div>
 
-                    <!-- <p class="lead text-secondary">
-                       
-
-                    </p> -->
-
                     <div class="article-body mt-4">
-                        <p>
-                            <?php echo $post['created_at']; ?>
-
-                        </p>
+                        <small class="text-muted">
+                            <?php echo htmlspecialchars($post['created_at']); ?>
+                        </small>
                     </div>
 
                 </div>
@@ -63,38 +57,43 @@ $post = mysqli_fetch_assoc($result);
             </div>
         </div>
 
+        <?php if ($post) { ?>
         <div class="col-lg-4">
             <div class="sidebar-box">
 
-                <h4 class="fw-bold mb-3">More stories</h4>
+                <h4 class="fw-bold mb-3">Actions & Options</h4>
 
                 <div class="d-grid gap-3">
 
-                    <a href="viewPost.php" class="text-decoration-none text-dark">
+                    <a href="/viewPost.php?id=<?php echo $post['id']; ?>" class="text-decoration-none text-dark">
                         <div class="border rounded-3 p-3 bg-light">
                             <small class="text-primary fw-semibold">
-                                <?php echo $post['badge']; ?>
-
+                                <?php echo htmlspecialchars($post['badge']); ?>
                             </small>
 
                             <div class="fw-semibold mt-2">
-                                <?php echo $post['title']; ?>
-
+                                <?php echo htmlspecialchars($post['title']); ?>
                             </div>
                         </div>
                     </a>
 
-                    <a href="aditPost.php?id=<?php echo $post['id']; ?>" class="btn btn-primary">
+
+                    <a href="/editPost.php?id=<?php echo $post['id']; ?>" class="btn btn-primary">
                         Edit Post
                     </a>
 
-                    <a href="handle/handleDeletePost.php?id=<?php echo $post['id']; ?>" class="btn btn-danger">
+
+                    <a href="/handle/handleDeletePost.php?id=<?php echo $post['id']; ?>" class="btn btn-danger"
+                        onclick="return confirm('Are you sure you want to delete this post?');">
                         Delete Post
                     </a>
 
                 </div>
             </div>
         </div>
+        <?php } ?>
 
     </div>
 </main>
+
+<?php require_once __DIR__.'/inc/footer.php'; ?>

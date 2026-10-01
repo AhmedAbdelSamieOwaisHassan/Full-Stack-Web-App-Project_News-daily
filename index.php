@@ -4,10 +4,10 @@ require_once 'inc/header.php';
 
 $numPostsQuery = 'SELECT COUNT(id) as total FROM posts';
 $resQuery = mysqli_query($connection, $numPostsQuery);
-$totalPosts = mysqli_fetch_assoc($resQuery)['total'];
-// print_r($totalPosts);
+$totalPosts = mysqli_fetch_assoc($resQuery)['total'] ?? 0;
+
 if (isset($_GET['page'])) {
-    $page = $_GET['page'];
+    $page = (int) $_GET['page'];
 } else {
     $page = 1;
 }
@@ -16,18 +16,17 @@ $offset = ($page - 1) * $limit;
 $numberOfPages = ceil($totalPosts / $limit);
 
 if ($page < 1) {
-    header('location:index.php?page=1');
+    header('location: /index.php?page=1');
     exit;
-} elseif ($page > $numberOfPages) {
-    header("location:index.php?page=$numberOfPages");
+} elseif ($numberOfPages > 0 && $page > $numberOfPages) {
+    header("location: /index.php?page=$numberOfPages");
     exit;
 }
-// ............
-$query = "SELECT * FROM posts LIMIT 6 OFFSET $offset ";
 
+$query = "SELECT * FROM posts LIMIT 6 OFFSET $offset";
 $result = mysqli_query($connection, $query);
-$numberOFposts = mysqli_num_rows($result);
-$posts = mysqli_fetch_all($result, MYSQLI_ASSOC);
+$numberOFposts = $result ? mysqli_num_rows($result) : 0;
+$posts = $result ? mysqli_fetch_all($result, MYSQLI_ASSOC) : [];
 ?>
 
 <main>
@@ -39,9 +38,9 @@ $posts = mysqli_fetch_all($result, MYSQLI_ASSOC);
                         <?php echo $language['TOPSTORY'] ?? 'Article content'; ?>
                     </div>
                     <h1 class="display-5 fw-bold mb-3"><?php echo $language['Global'] ?? 'Global'; ?></h1>
-                    <p class="lead text-secondary mb-4"> <?php echo $language['Governments'] ?? 'Governments'; ?></p>
+                    <p class="lead text-secondary mb-4"><?php echo $language['Governments'] ?? 'Governments'; ?></p>
                     <div class="d-flex flex-wrap gap-3 align-items-center">
-                        <a href="viewPost.php?id=1" class="btn btn-primary btn-lg"
+                        <a href="/viewPost.php?id=1" class="btn btn-primary btn-lg"
                             data-i18n="readFullStory"><?php echo $language['readFullStory'] ?? 'readFullStory'; ?></a>
                         <span class="text-secondary small"
                             data-i18n="updated"><?php echo $language['updated'] ?? 'updated'; ?></span>
@@ -50,7 +49,8 @@ $posts = mysqli_fetch_all($result, MYSQLI_ASSOC);
                 <div class="col-lg-5">
                     <div
                         class="image-placeholder feature-image d-flex align-items-center justify-content-center rounded-4 shadow w-100 overflow-hidden">
-                        <img src="assets/image/NewsDaily.jpg" alt="News Daily" class="w-100 h-100 object-fit-cover">
+
+                        <img src="/assets/image/NewsDaily.jpg" alt="News Daily" class="w-100 h-100 object-fit-cover">
                     </div>
                 </div>
             </div>
@@ -60,26 +60,27 @@ $posts = mysqli_fetch_all($result, MYSQLI_ASSOC);
     <section class="container py-5">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h2 class="section-title mb-0"><?php echo $language['Latest'] ?? 'Latest headlines'; ?></h2>
-            <a href="viewPost.php?id=1"
+            <a href="/viewPost.php?id=1"
                 class="text-decoration-none fw-semibold"><?php echo $language['seeAll'] ?? 'See All'; ?></a>
         </div>
-        <?php if (isset($_SESSION['success'])) {?>
+        <?php if (isset($_SESSION['success'])) { ?>
         <div class="alert alert-success">
             <?php echo $_SESSION['success']; ?>
         </div>
-
         <?php } unset($_SESSION['success']); ?>
+
         <?php if ($numberOFposts > 0) { ?>
         <div class="row g-4">
             <?php foreach ($posts as $post) { ?>
             <div class="col-md-6 col-xl-4">
                 <article class="card news-card shadow-sm h-100">
                     <div class="image-placeholder d-flex align-items-center justify-content-center card-img-top">
+
                         <img class="w-100 h-100 object-fit-cover"
-                            src="./assets/image/postImage/<?php echo htmlspecialchars($post['image']); ?>"
+                            src="/assets/image/postImage/<?php echo htmlspecialchars($post['image']); ?>"
                             alt="<?php echo htmlspecialchars($post['title']); ?>">
                     </div>
-                    <div class="card-body d-flex flex-column ">
+                    <div class="card-body d-flex flex-column">
                         <span class="badge bg-info-subtle text-info badge-category mb-3">
                             <?php echo htmlspecialchars($post['badge']); ?>
                         </span>
@@ -88,7 +89,7 @@ $posts = mysqli_fetch_all($result, MYSQLI_ASSOC);
                         <span class="badge bg-info-subtle text-info badge-category mb-3">
                             <?php echo htmlspecialchars($post['created_at']); ?>
                         </span>
-                        <a href="viewPost.php?id=<?php echo $post['id']; ?>"
+                        <a href="/viewPost.php?id=<?php echo $post['id']; ?>"
                             class="btn btn-info mt-auto"><?php echo $language['View'] ?? 'View'; ?></a>
                     </div>
                 </article>
@@ -96,38 +97,42 @@ $posts = mysqli_fetch_all($result, MYSQLI_ASSOC);
             <?php } ?>
         </div>
         <?php } else { ?>
-        <img src="./assets/image/images.png" alt="No posts found" class="w-100 h-100 object-fit-cover">
+        <img src="/assets/image/images.png" alt="No posts found" class="w-100 h-100 object-fit-cover">
         <?php } ?>
     </section>
+
     <nav aria-label="..." class="d-flex justify-content-center">
         <ul class="pagination">
-            <li class="page-item <?php if ($page == 1) {
+            <li class="page-item <?php if ($page <= 1) {
                 echo 'disabled';
-            } ?> "><a href="index.php?page=<?php echo $page - 1; ?>"
+            } ?>">
+                <a href="/index.php?page=<?php echo $page - 1; ?>"
                     class="page-link"><?php echo $language['Previous'] ?? 'Previous'; ?></a>
             </li>
 
             <?php for ($i = 1; $i <= $numberOfPages; ++$i) { ?>
-            <li class="page-item"><a class="page-link <?php if ($page == $i) {
+            <li class="page-item <?php if ($page == $i) {
                 echo 'active';
-            } ?>" href="index.php?page=<?php echo $i; ?>"><?php echo $i; ?></a>
+            } ?>">
+                <a class="page-link" href="/index.php?page=<?php echo $i; ?>"><?php echo $i; ?></a>
             </li>
             <?php } ?>
-            <!-- <li class="page-item active">
-                <a class="page-link" href="#" aria-current="page">2</a>
-            </li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li> -->
-            <li class="page-item <?php if ($page == $numberOfPages) {
+
+            <li class="page-item <?php if ($page >= $numberOfPages) {
                 echo 'disabled';
-            } ?>"><a class="page-link" href="index.php?page=<?php echo $page + 1; ?>"><?php echo $language['Next'] ?? 'Next'; ?></a></li>
+            } ?>">
+                <a class="page-link"
+                    href="/index.php?page=<?php echo $page + 1; ?>"><?php echo $language['Next'] ?? 'Next'; ?></a>
+            </li>
         </ul>
     </nav>
+
     <section class="container pb-5">
         <div class="row g-4">
             <div class="col-lg-8">
-                <h2 class="section-title mb-4" ><?php echo $language['mostDiscussed'] ?? 'mostDiscussed'; ?></h2>
+                <h2 class="section-title mb-4"><?php echo $language['mostDiscussed'] ?? 'mostDiscussed'; ?></h2>
                 <div class="list-group shadow-sm">
-                    <a href="viewPost.php?id=5" class="list-group-item list-group-item-action p-3">
+                    <a href="/viewPost.php?id=5" class="list-group-item list-group-item-action p-3">
                         <div class="d-flex justify-content-between gap-3">
                             <div>
                                 <small class="text-primary fw-semibold">Politics</small>
@@ -137,7 +142,7 @@ $posts = mysqli_fetch_all($result, MYSQLI_ASSOC);
                             <small class="text-secondary">2h ago</small>
                         </div>
                     </a>
-                    <a href="viewPost.php?id=6" class="list-group-item list-group-item-action p-3">
+                    <a href="/viewPost.php?id=6" class="list-group-item list-group-item-action p-3">
                         <div class="d-flex justify-content-between gap-3">
                             <div>
                                 <small class="text-primary fw-semibold">Health</small>
@@ -146,7 +151,7 @@ $posts = mysqli_fetch_all($result, MYSQLI_ASSOC);
                             <small class="text-secondary">5h ago</small>
                         </div>
                     </a>
-                    <a href="viewPost.php?id=1" class="list-group-item list-group-item-action p-3">
+                    <a href="/viewPost.php?id=1" class="list-group-item list-group-item-action p-3">
                         <div class="d-flex justify-content-between gap-3">
                             <div>
                                 <small class="text-primary fw-semibold">Economy</small>
@@ -163,13 +168,13 @@ $posts = mysqli_fetch_all($result, MYSQLI_ASSOC);
                 <div class="sidebar-box">
                     <h4 class="fw-bold mb-3" data-i18n="trendingNow">Trending now</h4>
                     <ul class="list-unstyled mb-0">
-                        <li class="mb-3"><a href="viewPost.php?id=2" class="text-decoration-none">AI tools reshape
+                        <li class="mb-3"><a href="/viewPost.php?id=2" class="text-decoration-none">AI tools reshape
                                 office productivity</a></li>
-                        <li class="mb-3"><a href="viewPost.php?id=3" class="text-decoration-none">Retail growth returns
+                        <li class="mb-3"><a href="/viewPost.php?id=3" class="text-decoration-none">Retail growth returns
                                 to urban centers</a></li>
-                        <li class="mb-3"><a href="viewPost.php?id=4" class="text-decoration-none">New transit networks
+                        <li class="mb-3"><a href="/viewPost.php?id=4" class="text-decoration-none">New transit networks
                                 reduce travel times</a></li>
-                        <li class="mb-0"><a href="viewPost.php?id=5" class="text-decoration-none">Campaigns focus on
+                        <li class="mb-0"><a href="/viewPost.php?id=5" class="text-decoration-none">Campaigns focus on
                                 everyday concerns</a></li>
                     </ul>
                 </div>
@@ -178,4 +183,4 @@ $posts = mysqli_fetch_all($result, MYSQLI_ASSOC);
     </section>
 </main>
 
-<?php include 'inc/footer.php'; ?>
+<?php include __DIR__.'/../inc/footer.php'; ?>

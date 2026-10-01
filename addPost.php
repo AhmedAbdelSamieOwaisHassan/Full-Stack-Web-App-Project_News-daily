@@ -7,8 +7,9 @@ require_once __DIR__.'/inc/header.php';
     <div class="row justify-content-center">
         <div class="col-lg-8">
             <div class="form-box">
-                <span
-                    class="badge bg-primary-subtle text-primary badge-category mb-3"><?php echo $language['submitBadge'] ?? 'Submit article'; ?></span>
+                <span class="badge bg-primary-subtle text-primary badge-category mb-3">
+                    <?php echo $language['submitBadge'] ?? 'Submit article'; ?>
+                </span>
                 <h1 class="mb-4"><?php echo $language['submitTitle'] ?? 'Publish a new story'; ?></h1>
 
                 <?php if (isset($_SESSION['errors'])) { ?>
@@ -18,7 +19,8 @@ require_once __DIR__.'/inc/header.php';
                 <?php unset($_SESSION['errors']); ?>
                 <?php } ?>
 
-                <form method="POST" action="handle/handlePosts.php" enctype="multipart/form-data">
+                <!-- تعديل المسار ليكون مطلقاً تبدأ بـ / لضمان العمل على Vercel -->
+                <form method="POST" action="/handle/handlePosts.php" enctype="multipart/form-data">
                     <div class="row g-3">
                         <div class="col-12">
                             <label
@@ -40,7 +42,7 @@ require_once __DIR__.'/inc/header.php';
                         <div class="col-12">
                             <label class="form-label"
                                 data-i18n="addImage"><?php echo $language['addImage'] ?? 'Add image'; ?></label>
-                            <input type="file" class="btn btn-secondary" name="image">
+                            <input type="file" class="form-control" name="image">
                         </div>
                         <div class="col-12">
                             <button type="submit"

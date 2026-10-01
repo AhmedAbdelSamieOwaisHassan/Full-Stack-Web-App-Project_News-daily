@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once 'inc/header.php';
+require_once __DIR__.'/inc/header.php';
 ?>
 
 <main class="container py-5">
@@ -24,7 +24,8 @@ require_once 'inc/header.php';
                 <?php unset($_SESSION['error']);
                 } ?>
 
-                <form class="form" action="handle/handleLogin.php" method="post">
+
+                <form class="form" action="/handle/handleLogin.php" method="post">
                     <div class="mb-3">
                         <label class="form-label">Email</label>
                         <input type="email" name="email" class="form-control" required placeholder="Enter your email">
@@ -51,4 +52,4 @@ require_once 'inc/header.php';
     </div>
 </main>
 
-<?php require_once 'inc/footer.php'; ?>
+<?php require_once __DIR__.'/inc/footer.php'; ?>
