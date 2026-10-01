@@ -1,3 +1,5 @@
-inc/connection.php
+.env
+.env.*
+!.env.example
 .vercel/
 node_modules/
