@@ -183,4 +183,4 @@ $posts = $result ? mysqli_fetch_all($result, MYSQLI_ASSOC) : [];
     </section>
 </main>
 
-<?php include __DIR__.'/../inc/footer.php'; ?>
+<?php include __DIR__ . '/inc/footer.php'; ?>
