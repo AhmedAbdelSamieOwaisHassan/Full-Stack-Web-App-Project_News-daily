@@ -1,23 +1,41 @@
 <?php
 
-// session_start();
-// $hostName = 'localhost';
-// $DBuser = 'root';
-// $password = '';
-// $dbName = 'site_news_project';
-// $connection = mysqli_connect($hostName, $DBuser, $password, $dbName);
-
 session_start();
 
-$hostName = 'localhost';
-$DBuser = 'root';
-$password = '';
-$dbName = 'site_news_project';
+$hostName = getenv('DB_HOST') ?: 'localhost';
+$DBuser = getenv('DB_USER') ?: ($hostName === 'localhost' ? 'root' : '');
+$password = getenv('DB_PASSWORD') ?: '';
+$dbName = getenv('DB_NAME') ?: ($hostName === 'localhost' ? 'site_news_project' : '');
+$port = (int) (getenv('DB_PORT') ?: ($hostName === 'localhost' ? 3306 : 4000));
 
-$connection = mysqli_connect($hostName, $DBuser, $password, $dbName);
+$isRemote = !in_array(strtolower($hostName), ['localhost', '127.0.0.1'], true);
+
+if ($isRemote && ($DBuser === '' || $password === '' || $dbName === '')) {
+    error_log('Remote database settings are incomplete.');
+    http_response_code(500);
+    exit('Database environment variables are incomplete.');
+}
+
+$connection = mysqli_init();
 
 if (!$connection) {
-    $_SESSION['errors'] = ['Database connection failed: '.mysqli_connect_error()];
-    header('Location: ../addPost.php');
-    exit;
+    error_log('Database initialization failed.');
+    http_response_code(500);
+    exit('Database connection failed.');
 }
+
+if ($isRemote) {
+    mysqli_ssl_set($connection, null, null, null, null, null);
+    mysqli_options($connection, MYSQLI_OPT_SSL_VERIFY_SERVER_CERT, false);
+}
+
+$flags = $isRemote ? MYSQLI_CLIENT_SSL : 0;
+$connected = @mysqli_real_connect($connection, $hostName, $DBuser, $password, $dbName, $port, null, $flags);
+
+if (!$connected) {
+    error_log('Database connection failed: '.mysqli_connect_error());
+    http_response_code(500);
+    exit('Database connection failed. Check server logs and settings.');
+}
+
+mysqli_set_charset($connection, 'utf8mb4');
