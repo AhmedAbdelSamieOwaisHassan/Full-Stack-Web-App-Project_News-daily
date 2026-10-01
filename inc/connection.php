@@ -27,6 +27,13 @@ if ($isRemote) {
     }
 
     if ($caCertificate !== false && $caCertificate !== '') {
+        $caCertificate = str_replace(["\\r\\n", "\\n", "\\r"], "\n", $caCertificate);
+        if (openssl_x509_read($caCertificate) === false) {
+            error_log('DB_CA_CERT is not a valid PEM certificate.');
+            http_response_code(500);
+            exit('The database TLS certificate is invalid. Set DB_CA_CERT to the complete PEM certificate.');
+        }
+
         $temporaryCaPath = tempnam(sys_get_temp_dir(), 'db-ca-');
         if ($temporaryCaPath === false || file_put_contents($temporaryCaPath, $caCertificate) === false) {
             error_log('Database CA certificate could not be prepared.');
