@@ -1,6 +1,7 @@
 <?php
-require_once __DIR__.'/inc/header.php';
 require_once __DIR__.'/inc/connection.php';
+
+require_once __DIR__.'/inc/header.php';
 
 if (!isset($_GET['id'])) {
     header('location: /index.php');
