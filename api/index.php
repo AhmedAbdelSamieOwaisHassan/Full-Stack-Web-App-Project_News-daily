@@ -1,11 +1,11 @@
 <?php
-require_once 'inc/connection.php';
-require_once 'inc/header.php';
+require_once __DIR__.'/../inc/connection.php';
+require_once __DIR__.'/../inc/header.php';
 
 $numPostsQuery = 'SELECT COUNT(id) as total FROM posts';
 $resQuery = mysqli_query($connection, $numPostsQuery);
 $totalPosts = mysqli_fetch_assoc($resQuery)['total'];
-// print_r($totalPosts);
+
 if (isset($_GET['page'])) {
     $page = $_GET['page'];
 } else {
@@ -22,7 +22,7 @@ if ($page < 1) {
     header("location:index.php?page=$numberOfPages");
     exit;
 }
-// ............
+
 $query = "SELECT * FROM posts LIMIT 6 OFFSET $offset ";
 
 $result = mysqli_query($connection, $query);
@@ -113,10 +113,6 @@ $posts = mysqli_fetch_all($result, MYSQLI_ASSOC);
             } ?>" href="index.php?page=<?php echo $i; ?>"><?php echo $i; ?></a>
             </li>
             <?php } ?>
-            <!-- <li class="page-item active">
-                <a class="page-link" href="#" aria-current="page">2</a>
-            </li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li> -->
             <li class="page-item <?php if ($page == $numberOfPages) {
                 echo 'disabled';
             } ?>"><a class="page-link"
@@ -179,4 +175,4 @@ $posts = mysqli_fetch_all($result, MYSQLI_ASSOC);
     </section>
 </main>
 
-<?php include 'inc/footer.php'; ?>
+<?php include __DIR__.'/../inc/footer.php'; ?>
