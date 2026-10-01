@@ -7,9 +7,9 @@ if (isset($_SESSION['lang'])) {
 }
 
 if ($lang == 'ar') {
-    require_once 'lang/languages_ar.php';
+    require_once __DIR__.'/../lang/languages_ar.php';
 } else {
-    require_once 'lang/languages_en.php';
+    require_once __DIR__.'/../lang/languages_en.php';
 }
 
 ?>
