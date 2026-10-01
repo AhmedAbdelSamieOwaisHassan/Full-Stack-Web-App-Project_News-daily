@@ -1,0 +1,131 @@
+:root {
+    --primary: #0d6efd;
+    --dark: #0f172a;
+    --muted: #64748b;
+    --light: #f8fafc;
+    --card: #ffffff;
+}
+
+body {
+    background: #f4f7fb;
+    color: var(--dark);
+    font-family: Arial, sans-serif;
+}
+
+.topbar {
+    background: #0b1324;
+    color: white;
+    font-size: 0.8rem;
+}
+
+.navbar {
+    background: rgba(15, 23, 42, 0.96) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.hero-wrap {
+    background: linear-gradient(135deg, #eaf2ff, #f9fbff);
+    padding: 30px 0 20px;
+}
+
+.section-title {
+    font-weight: 800;
+    letter-spacing: -0.03em;
+}
+
+.news-card {
+    border: 0;
+    overflow: hidden;
+    transition: transform 0.2s ease;
+    height: 100%;
+}
+
+.news-card:hover {
+    transform: translateY(-3px);
+}
+
+.news-card img {
+    height: 220px;
+    object-fit: cover;
+}
+
+.image-placeholder {
+    background: linear-gradient(135deg, #edf2ff, #f8fafc);
+    border: 2px dashed #cbd5e1;
+    color: #64748b;
+    height: 220px;
+    width: 100%;
+    letter-spacing: 0.08em;
+}
+
+.badge-category {
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.feature-image {
+    height: 360px;
+    object-fit: cover;
+}
+
+.sidebar-box {
+    background: white;
+    border-radius: 1rem;
+    padding: 1.2rem;
+    box-shadow: 0 10px 25px rgba(15, 23, 42, 0.05);
+}
+
+.footer {
+    background: #0b1324;
+    color: rgba(255, 255, 255, 0.8);
+    padding: 32px 0 18px;
+}
+
+.article-body {
+    line-height: 1.9;
+    font-size: 1.06rem;
+    color: #334155;
+}
+
+.form-box {
+    background: white;
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: 0 10px 25px rgba(15, 23, 42, 0.04);
+}
+
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.lang-btn {
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: transparent;
+    color: #fff;
+    border-radius: 999px;
+    padding: 0.35rem 0.8rem;
+    font-size: 0.8rem;
+    transition: all 0.2s ease;
+}
+
+.lang-btn.active {
+    background: #fff;
+    color: #0b1324;
+    font-weight: 700;
+}
+
+body[dir="rtl"] .navbar-nav {
+    margin-left: auto !important;
+    margin-right: 0 !important;
+}
+
+body[dir="rtl"] .nav-actions {
+    flex-direction: row-reverse;
+}
+
+body[dir="rtl"] .navbar-brand {
+    margin-left: 1rem;
+}
