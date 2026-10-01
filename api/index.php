@@ -1,6 +1,6 @@
 <?php
-require_once 'inc/connection.php';
-require_once 'inc/header.php';
+require_once __DIR__ . '/../inc/connection.php';
+require_once __DIR__ . '/../inc/header.php';
 
 $numPostsQuery = 'SELECT COUNT(id) as total FROM posts';
 $resQuery = mysqli_query($connection, $numPostsQuery);
@@ -179,4 +179,4 @@ $posts = mysqli_fetch_all($result, MYSQLI_ASSOC);
     </section>
 </main>
 
-<?php include 'inc/footer.php'; ?>
+<?php include __DIR__ . '/../inc/footer.php'; ?>
