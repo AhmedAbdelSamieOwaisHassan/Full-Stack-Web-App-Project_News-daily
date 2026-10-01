@@ -1,1 +1,3 @@
 inc/connection.php
+.vercel/
+node_modules/
