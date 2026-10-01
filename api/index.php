@@ -1,35 +1,21 @@
 <?php
-require_once __DIR__.'/../inc/connection.php';
-require_once __DIR__.'/../inc/header.php';
+$requestUri = $_SERVER['REQUEST_URI'];
+$parsedUrl = parse_url($requestUri, PHP_URL_PATH);
 
-$numPostsQuery = 'SELECT COUNT(id) as total FROM posts';
-$resQuery = mysqli_query($connection, $numPostsQuery);
-$totalPosts = mysqli_fetch_assoc($resQuery)['total'];
+$file = ltrim($parsedUrl, '/');
 
-if (isset($_GET['page'])) {
-    $page = $_GET['page'];
+if ($file === '' || $file === 'index.php') {
+    $file = 'index.php';
+}
+
+$filePath = __DIR__.'/../'.$file;
+
+if (file_exists($filePath) && is_file($filePath) && strpos(realpath($filePath), realpath(__DIR__.'/..')) === 0) {
+    require $filePath;
 } else {
-    $page = 1;
-}
-$limit = 5;
-$offset = ($page - 1) * $limit;
-$numberOfPages = ceil($totalPosts / $limit);
-
-if ($page < 1) {
-    header('location:index.php?page=1');
-    exit;
-} elseif ($page > $numberOfPages) {
-    header("location:index.php?page=$numberOfPages");
-    exit;
-}
-
-$query = "SELECT * FROM posts LIMIT 6 OFFSET $offset ";
-
-$result = mysqli_query($connection, $query);
-$numberOFposts = mysqli_num_rows($result);
-$posts = mysqli_fetch_all($result, MYSQLI_ASSOC);
-?>
-
+    http_response_code(404);
+    echo '<h1>404 - Page Not Found</h1>';
+} ?>
 <main>
     <section class="hero-wrap">
         <div class="container">
