@@ -28,17 +28,17 @@ Uploaded article images are stored in `assets/image/postImage/`. Make sure this 
 
 ## Screenshots
 
-| Homepage                                           | Article page                                          |
-| -------------------------------------------------- | ----------------------------------------------------- |
-| ![Homepage](assets/image/screenshots/homepage.png) | ![Article page](assets/image/screenshots/article.png) |
+| Homepage                                     | Article page                                    |
+| -------------------------------------------- | ----------------------------------------------- |
+| ![Homepage](assets/screenshots/homepage.png) | ![Article page](assets/screenshots/article.png) |
 
-| Login page                                        | Registration page                                           |
-| ------------------------------------------------- | ----------------------------------------------------------- |
-| ![Login page](assets/image/screenshots/login.png) | ![Registration page](assets/image/screenshots/register.png) |
+| Login page                                  | Registration page                                     |
+| ------------------------------------------- | ----------------------------------------------------- |
+| ![Login page](assets/screenshots/login.png) | ![Registration page](assets/screenshots/register.png) |
 
-| Add post page                                          | Update post page                                             |
-| ------------------------------------------------------ | ------------------------------------------------------------ |
-| ![Add post page](assets/image/screenshots/AddPost.png) | ![Update post page](assets/image/screenshots/UpdatePost.png) |
+| Add post page                                    | Update post page                                       |
+| ------------------------------------------------ | ------------------------------------------------------ |
+| ![Add post page](assets/screenshots/AddPost.png) | ![Update post page](assets/screenshots/UpdatePost.png) |
 
 ## Deployment
 
