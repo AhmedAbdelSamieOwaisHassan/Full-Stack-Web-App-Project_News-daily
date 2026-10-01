@@ -11,6 +11,10 @@
       "dest": "/assets/$1"
     },
     {
+      "src": "/vender/(.*)",
+      "dest": "/vender/$1"
+    },
+    {
       "src": "/(.*)",
       "dest": "/api/index.php"
     }

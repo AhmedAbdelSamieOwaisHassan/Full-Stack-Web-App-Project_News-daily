@@ -13,8 +13,8 @@
         </div>
     </footer>
 
-    <script src="vender/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="assets/js/main.js"></script>
+    <script src="/vender/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/assets/js/main.js"></script>
     </body>
 
     </html>

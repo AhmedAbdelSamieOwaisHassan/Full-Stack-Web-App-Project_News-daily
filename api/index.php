@@ -50,7 +50,7 @@ $posts = mysqli_fetch_all($result, MYSQLI_ASSOC);
                 <div class="col-lg-5">
                     <div
                         class="image-placeholder feature-image d-flex align-items-center justify-content-center rounded-4 shadow w-100 overflow-hidden">
-                        <img src="assets/image/NewsDaily.jpg" alt="News Daily" class="w-100 h-100 object-fit-cover">
+                        <img src="/assets/image/NewsDaily.jpg" alt="News Daily" class="w-100 h-100 object-fit-cover">
                     </div>
                 </div>
             </div>
@@ -76,7 +76,7 @@ $posts = mysqli_fetch_all($result, MYSQLI_ASSOC);
                 <article class="card news-card shadow-sm h-100">
                     <div class="image-placeholder d-flex align-items-center justify-content-center card-img-top">
                         <img class="w-100 h-100 object-fit-cover"
-                            src="./assets/image/postImage/<?php echo htmlspecialchars($post['image']); ?>"
+                            src="/assets/image/postImage/<?php echo htmlspecialchars($post['image']); ?>"
                             alt="<?php echo htmlspecialchars($post['title']); ?>">
                     </div>
                     <div class="card-body d-flex flex-column ">
@@ -96,7 +96,7 @@ $posts = mysqli_fetch_all($result, MYSQLI_ASSOC);
             <?php } ?>
         </div>
         <?php } else { ?>
-        <img src="./assets/image/images.png" alt="No posts found" class="w-100 h-100 object-fit-cover">
+        <img src="/assets/image/images.png" alt="No posts found" class="w-100 h-100 object-fit-cover">
         <?php } ?>
     </section>
     <nav aria-label="..." class="d-flex justify-content-center">

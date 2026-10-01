@@ -24,7 +24,7 @@ $post = mysqli_fetch_assoc($result);
             <div class="bg-white rounded-4 shadow-sm overflow-hidden">
                 <?php if (mysqli_num_rows($result) > 0) {?>
                 <div class="image-placeholder feature-image d-flex align-items-center justify-content-center">
-                    <img src="assets/image/postImage/<?php echo $post['image']; ?>" alt="Post title"
+                    <img src="/assets/image/postImage/<?php echo $post['image']; ?>" alt="Post title"
                         class="img-fluid w-100 feature-image">
                 </div>
 
@@ -58,7 +58,7 @@ $post = mysqli_fetch_assoc($result);
 
                 </div>
                 <?php } else { ?>
-                <img src="./assets/image/notFound.png" alt="No posts found" class="w-100 h-100 object-fit-cover">
+                <img src="/assets/image/notFound.png" alt="No posts found" class="w-100 h-100 object-fit-cover">
                 <?php } ?>
             </div>
         </div>
